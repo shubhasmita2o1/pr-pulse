@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ClientsRouteImport } from './routes/clients'
+import { Route as MeetingsRouteImport } from './routes/meetings'
+import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
+import { Route as TranscriptsTranscriptIdRouteImport } from './routes/transcripts.$transcriptId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +26,84 @@ const ClientsRoute = ClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MeetingsRoute = MeetingsRouteImport.update({
+  id: '/meetings',
+  path: '/meetings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TranscriptsRoute = TranscriptsRouteImport.update({
+  id: '/transcripts',
+  path: '/transcripts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClientsClientIdRoute = ClientsClientIdRouteImport.update({
   id: '/$clientId',
   path: '/$clientId',
   getParentRoute: () => ClientsRoute,
 } as any)
+const TranscriptsTranscriptIdRoute = TranscriptsTranscriptIdRouteImport.update({
+  id: '/$transcriptId',
+  path: '/$transcriptId',
+  getParentRoute: () => TranscriptsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/clients': typeof ClientsRouteWithChildren
+  '/meetings': typeof MeetingsRoute
+  '/transcripts': typeof TranscriptsRouteWithChildren
   '/clients/$clientId': typeof ClientsClientIdRoute
+  '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/clients': typeof ClientsRouteWithChildren
+  '/meetings': typeof MeetingsRoute
+  '/transcripts': typeof TranscriptsRouteWithChildren
   '/clients/$clientId': typeof ClientsClientIdRoute
+  '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/clients': typeof ClientsRouteWithChildren
+  '/meetings': typeof MeetingsRoute
+  '/transcripts': typeof TranscriptsRouteWithChildren
   '/clients/$clientId': typeof ClientsClientIdRoute
+  '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clients' | '/clients/$clientId'
+  fullPaths:
+    | '/'
+    | '/clients'
+    | '/meetings'
+    | '/transcripts'
+    | '/clients/$clientId'
+    | '/transcripts/$transcriptId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/clients' | '/clients/$clientId'
-  id: '__root__' | '/' | '/clients' | '/clients/$clientId'
+  to:
+    | '/'
+    | '/clients'
+    | '/meetings'
+    | '/transcripts'
+    | '/clients/$clientId'
+    | '/transcripts/$transcriptId'
+  id:
+    | '__root__'
+    | '/'
+    | '/clients'
+    | '/meetings'
+    | '/transcripts'
+    | '/clients/$clientId'
+    | '/transcripts/$transcriptId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClientsRoute: typeof ClientsRouteWithChildren
+  MeetingsRoute: typeof MeetingsRoute
+  TranscriptsRoute: typeof TranscriptsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -74,12 +122,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/meetings': {
+      id: '/meetings'
+      path: '/meetings'
+      fullPath: '/meetings'
+      preLoaderRoute: typeof MeetingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transcripts': {
+      id: '/transcripts'
+      path: '/transcripts'
+      fullPath: '/transcripts'
+      preLoaderRoute: typeof TranscriptsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clients/$clientId': {
       id: '/clients/$clientId'
       path: '/$clientId'
       fullPath: '/clients/$clientId'
       preLoaderRoute: typeof ClientsClientIdRouteImport
       parentRoute: typeof ClientsRoute
+    }
+    '/transcripts/$transcriptId': {
+      id: '/transcripts/$transcriptId'
+      path: '/$transcriptId'
+      fullPath: '/transcripts/$transcriptId'
+      preLoaderRoute: typeof TranscriptsTranscriptIdRouteImport
+      parentRoute: typeof TranscriptsRoute
     }
   }
 }
@@ -95,9 +164,23 @@ const ClientsRouteChildren: ClientsRouteChildren = {
 const ClientsRouteWithChildren =
   ClientsRoute._addFileChildren(ClientsRouteChildren)
 
+interface TranscriptsRouteChildren {
+  TranscriptsTranscriptIdRoute: typeof TranscriptsTranscriptIdRoute
+}
+
+const TranscriptsRouteChildren: TranscriptsRouteChildren = {
+  TranscriptsTranscriptIdRoute: TranscriptsTranscriptIdRoute,
+}
+
+const TranscriptsRouteWithChildren = TranscriptsRoute._addFileChildren(
+  TranscriptsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClientsRoute: ClientsRouteWithChildren,
+  MeetingsRoute: MeetingsRoute,
+  TranscriptsRoute: TranscriptsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
