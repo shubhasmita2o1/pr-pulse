@@ -16,8 +16,11 @@ import { Route as ImportsRouteImport } from './routes/imports'
 import { Route as MeetingsRouteImport } from './routes/meetings'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
+import { Route as CampaignsIndexRouteImport } from './routes/campaigns.index'
 import { Route as CampaignsCampaignIdRouteImport } from './routes/campaigns.$campaignId'
+import { Route as ClientsIndexRouteImport } from './routes/clients.index'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
+import { Route as TranscriptsIndexRouteImport } from './routes/transcripts.index'
 import { Route as TranscriptsTranscriptIdRouteImport } from './routes/transcripts.$transcriptId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -55,15 +58,30 @@ const TranscriptsRoute = TranscriptsRouteImport.update({
   path: '/transcripts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CampaignsIndexRoute = CampaignsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CampaignsRoute,
+} as any)
 const CampaignsCampaignIdRoute = CampaignsCampaignIdRouteImport.update({
   id: '/$campaignId',
   path: '/$campaignId',
   getParentRoute: () => CampaignsRoute,
 } as any)
+const ClientsIndexRoute = ClientsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ClientsRoute,
+} as any)
 const ClientsClientIdRoute = ClientsClientIdRouteImport.update({
   id: '/$clientId',
   path: '/$clientId',
   getParentRoute: () => ClientsRoute,
+} as any)
+const TranscriptsIndexRoute = TranscriptsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TranscriptsRoute,
 } as any)
 const TranscriptsTranscriptIdRoute = TranscriptsTranscriptIdRouteImport.update({
   id: '/$transcriptId',
@@ -82,18 +100,21 @@ export interface FileRoutesByFullPath {
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
+  '/campaigns/': typeof CampaignsIndexRoute
+  '/clients/': typeof ClientsIndexRoute
+  '/transcripts/': typeof TranscriptsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/campaigns': typeof CampaignsRouteWithChildren
-  '/clients': typeof ClientsRouteWithChildren
   '/imports': typeof ImportsRoute
   '/meetings': typeof MeetingsRoute
   '/settings': typeof SettingsRoute
-  '/transcripts': typeof TranscriptsRouteWithChildren
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
+  '/campaigns': typeof CampaignsIndexRoute
+  '/clients': typeof ClientsIndexRoute
+  '/transcripts': typeof TranscriptsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +128,9 @@ export interface FileRoutesById {
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
+  '/campaigns/': typeof CampaignsIndexRoute
+  '/clients/': typeof ClientsIndexRoute
+  '/transcripts/': typeof TranscriptsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,18 +145,21 @@ export interface FileRouteTypes {
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
+    | '/campaigns/'
+    | '/clients/'
+    | '/transcripts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/campaigns'
-    | '/clients'
     | '/imports'
     | '/meetings'
     | '/settings'
-    | '/transcripts'
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
+    | '/campaigns'
+    | '/clients'
+    | '/transcripts'
   id:
     | '__root__'
     | '/'
@@ -145,6 +172,9 @@ export interface FileRouteTypes {
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
+    | '/campaigns/'
+    | '/clients/'
+    | '/transcripts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -208,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TranscriptsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/campaigns/': {
+      id: '/campaigns/'
+      path: '/'
+      fullPath: '/campaigns/'
+      preLoaderRoute: typeof CampaignsIndexRouteImport
+      parentRoute: typeof CampaignsRoute
+    }
     '/campaigns/$campaignId': {
       id: '/campaigns/$campaignId'
       path: '/$campaignId'
@@ -215,12 +252,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CampaignsCampaignIdRouteImport
       parentRoute: typeof CampaignsRoute
     }
+    '/clients/': {
+      id: '/clients/'
+      path: '/'
+      fullPath: '/clients/'
+      preLoaderRoute: typeof ClientsIndexRouteImport
+      parentRoute: typeof ClientsRoute
+    }
     '/clients/$clientId': {
       id: '/clients/$clientId'
       path: '/$clientId'
       fullPath: '/clients/$clientId'
       preLoaderRoute: typeof ClientsClientIdRouteImport
       parentRoute: typeof ClientsRoute
+    }
+    '/transcripts/': {
+      id: '/transcripts/'
+      path: '/'
+      fullPath: '/transcripts/'
+      preLoaderRoute: typeof TranscriptsIndexRouteImport
+      parentRoute: typeof TranscriptsRoute
     }
     '/transcripts/$transcriptId': {
       id: '/transcripts/$transcriptId'
@@ -234,10 +285,12 @@ declare module '@tanstack/react-router' {
 
 interface CampaignsRouteChildren {
   CampaignsCampaignIdRoute: typeof CampaignsCampaignIdRoute
+  CampaignsIndexRoute: typeof CampaignsIndexRoute
 }
 
 const CampaignsRouteChildren: CampaignsRouteChildren = {
   CampaignsCampaignIdRoute: CampaignsCampaignIdRoute,
+  CampaignsIndexRoute: CampaignsIndexRoute,
 }
 
 const CampaignsRouteWithChildren = CampaignsRoute._addFileChildren(
@@ -246,10 +299,12 @@ const CampaignsRouteWithChildren = CampaignsRoute._addFileChildren(
 
 interface ClientsRouteChildren {
   ClientsClientIdRoute: typeof ClientsClientIdRoute
+  ClientsIndexRoute: typeof ClientsIndexRoute
 }
 
 const ClientsRouteChildren: ClientsRouteChildren = {
   ClientsClientIdRoute: ClientsClientIdRoute,
+  ClientsIndexRoute: ClientsIndexRoute,
 }
 
 const ClientsRouteWithChildren =
@@ -257,10 +312,12 @@ const ClientsRouteWithChildren =
 
 interface TranscriptsRouteChildren {
   TranscriptsTranscriptIdRoute: typeof TranscriptsTranscriptIdRoute
+  TranscriptsIndexRoute: typeof TranscriptsIndexRoute
 }
 
 const TranscriptsRouteChildren: TranscriptsRouteChildren = {
   TranscriptsTranscriptIdRoute: TranscriptsTranscriptIdRoute,
+  TranscriptsIndexRoute: TranscriptsIndexRoute,
 }
 
 const TranscriptsRouteWithChildren = TranscriptsRoute._addFileChildren(
