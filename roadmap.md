@@ -8,4 +8,4 @@
 - [x] Campaign directory, detail, metrics, and screenshot extraction
 - [x] XLSX imports and batch history
 - [x] Team and integration settings
-- [ ] Browser validation at desktop and narrow viewports
+- [x] Browser validation at desktop and narrow viewports
