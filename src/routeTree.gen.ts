@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CampaignsRouteImport } from './routes/campaigns'
 import { Route as ClientsRouteImport } from './routes/clients'
 import { Route as MeetingsRouteImport } from './routes/meetings'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
+import { Route as CampaignsCampaignIdRouteImport } from './routes/campaigns.$campaignId'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
 import { Route as TranscriptsTranscriptIdRouteImport } from './routes/transcripts.$transcriptId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignsRoute = CampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClientsRoute = ClientsRouteImport.update({
@@ -36,6 +43,11 @@ const TranscriptsRoute = TranscriptsRouteImport.update({
   path: '/transcripts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CampaignsCampaignIdRoute = CampaignsCampaignIdRouteImport.update({
+  id: '/$campaignId',
+  path: '/$campaignId',
+  getParentRoute: () => CampaignsRoute,
+} as any)
 const ClientsClientIdRoute = ClientsClientIdRouteImport.update({
   id: '/$clientId',
   path: '/$clientId',
@@ -49,26 +61,32 @@ const TranscriptsTranscriptIdRoute = TranscriptsTranscriptIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
   '/meetings': typeof MeetingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
   '/meetings': typeof MeetingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
   '/meetings': typeof MeetingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
+  '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
   '/transcripts/$transcriptId': typeof TranscriptsTranscriptIdRoute
 }
@@ -76,31 +94,38 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/campaigns'
     | '/clients'
     | '/meetings'
     | '/transcripts'
+    | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/campaigns'
     | '/clients'
     | '/meetings'
     | '/transcripts'
+    | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
   id:
     | '__root__'
     | '/'
+    | '/campaigns'
     | '/clients'
     | '/meetings'
     | '/transcripts'
+    | '/campaigns/$campaignId'
     | '/clients/$clientId'
     | '/transcripts/$transcriptId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CampaignsRoute: typeof CampaignsRouteWithChildren
   ClientsRoute: typeof ClientsRouteWithChildren
   MeetingsRoute: typeof MeetingsRoute
   TranscriptsRoute: typeof TranscriptsRouteWithChildren
@@ -113,6 +138,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaigns': {
+      id: '/campaigns'
+      path: '/campaigns'
+      fullPath: '/campaigns'
+      preLoaderRoute: typeof CampaignsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clients': {
@@ -136,6 +168,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TranscriptsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/campaigns/$campaignId': {
+      id: '/campaigns/$campaignId'
+      path: '/$campaignId'
+      fullPath: '/campaigns/$campaignId'
+      preLoaderRoute: typeof CampaignsCampaignIdRouteImport
+      parentRoute: typeof CampaignsRoute
+    }
     '/clients/$clientId': {
       id: '/clients/$clientId'
       path: '/$clientId'
@@ -152,6 +191,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface CampaignsRouteChildren {
+  CampaignsCampaignIdRoute: typeof CampaignsCampaignIdRoute
+}
+
+const CampaignsRouteChildren: CampaignsRouteChildren = {
+  CampaignsCampaignIdRoute: CampaignsCampaignIdRoute,
+}
+
+const CampaignsRouteWithChildren = CampaignsRoute._addFileChildren(
+  CampaignsRouteChildren,
+)
 
 interface ClientsRouteChildren {
   ClientsClientIdRoute: typeof ClientsClientIdRoute
@@ -178,6 +229,7 @@ const TranscriptsRouteWithChildren = TranscriptsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CampaignsRoute: CampaignsRouteWithChildren,
   ClientsRoute: ClientsRouteWithChildren,
   MeetingsRoute: MeetingsRoute,
   TranscriptsRoute: TranscriptsRouteWithChildren,
