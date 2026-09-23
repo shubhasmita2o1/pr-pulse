@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CampaignsRouteImport } from './routes/campaigns'
 import { Route as ClientsRouteImport } from './routes/clients'
+import { Route as ImportsRouteImport } from './routes/imports'
 import { Route as MeetingsRouteImport } from './routes/meetings'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as CampaignsCampaignIdRouteImport } from './routes/campaigns.$campaignId'
 import { Route as ClientsClientIdRouteImport } from './routes/clients.$clientId'
@@ -33,9 +35,19 @@ const ClientsRoute = ClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImportsRoute = ImportsRouteImport.update({
+  id: '/imports',
+  path: '/imports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeetingsRoute = MeetingsRouteImport.update({
   id: '/meetings',
   path: '/meetings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TranscriptsRoute = TranscriptsRouteImport.update({
@@ -63,7 +75,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
+  '/imports': typeof ImportsRoute
   '/meetings': typeof MeetingsRoute
+  '/settings': typeof SettingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -73,7 +87,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
+  '/imports': typeof ImportsRoute
   '/meetings': typeof MeetingsRoute
+  '/settings': typeof SettingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -84,7 +100,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/campaigns': typeof CampaignsRouteWithChildren
   '/clients': typeof ClientsRouteWithChildren
+  '/imports': typeof ImportsRoute
   '/meetings': typeof MeetingsRoute
+  '/settings': typeof SettingsRoute
   '/transcripts': typeof TranscriptsRouteWithChildren
   '/campaigns/$campaignId': typeof CampaignsCampaignIdRoute
   '/clients/$clientId': typeof ClientsClientIdRoute
@@ -96,7 +114,9 @@ export interface FileRouteTypes {
     | '/'
     | '/campaigns'
     | '/clients'
+    | '/imports'
     | '/meetings'
+    | '/settings'
     | '/transcripts'
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
@@ -106,7 +126,9 @@ export interface FileRouteTypes {
     | '/'
     | '/campaigns'
     | '/clients'
+    | '/imports'
     | '/meetings'
+    | '/settings'
     | '/transcripts'
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
@@ -116,7 +138,9 @@ export interface FileRouteTypes {
     | '/'
     | '/campaigns'
     | '/clients'
+    | '/imports'
     | '/meetings'
+    | '/settings'
     | '/transcripts'
     | '/campaigns/$campaignId'
     | '/clients/$clientId'
@@ -127,7 +151,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CampaignsRoute: typeof CampaignsRouteWithChildren
   ClientsRoute: typeof ClientsRouteWithChildren
+  ImportsRoute: typeof ImportsRoute
   MeetingsRoute: typeof MeetingsRoute
+  SettingsRoute: typeof SettingsRoute
   TranscriptsRoute: typeof TranscriptsRouteWithChildren
 }
 
@@ -154,11 +180,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/imports': {
+      id: '/imports'
+      path: '/imports'
+      fullPath: '/imports'
+      preLoaderRoute: typeof ImportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meetings': {
       id: '/meetings'
       path: '/meetings'
       fullPath: '/meetings'
       preLoaderRoute: typeof MeetingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/transcripts': {
@@ -231,7 +271,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CampaignsRoute: CampaignsRouteWithChildren,
   ClientsRoute: ClientsRouteWithChildren,
+  ImportsRoute: ImportsRoute,
   MeetingsRoute: MeetingsRoute,
+  SettingsRoute: SettingsRoute,
   TranscriptsRoute: TranscriptsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
